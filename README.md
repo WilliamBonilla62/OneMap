@@ -112,7 +112,7 @@ You can run the code on an example, visualized in [rerun.io](https://rerun.io/) 
 #### Docker
 You will need to have [rerun.io](https://rerun.io/) installed on the host for visualization.
 Ensure the docker is running and you are in the container as described in the [Docker setup](#setup-docker). Then launch
-the rerun viewer with:
+the rerun viewer **on the host** (not inside the docker) with:
 ```
 rerun
 ```
