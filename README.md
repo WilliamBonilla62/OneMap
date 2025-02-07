@@ -43,7 +43,10 @@ installed and configured as docker runtime on your system.
 
 ### 1. Clone the repository
 ```
-git clone https://github.com/finnBsch/MON.git
+# https
+git clone https://github.com/KTH-RPL/OneMap.git
+# or ssh
+git clone git@github.com:KTH-RPL/OneMap.git
 cd OneMap/
 ```
 ### 2. Build the Docker Image
@@ -70,7 +73,10 @@ docker exec -it onemap-onemap-1 bash
 
 ### 1. Clone the repository
 ```
-git clone https://github.com/finnBsch/MON.git
+# https
+git clone https://github.com/KTH-RPL/OneMap.git
+# or ssh
+git clone git@github.com:KTH-RPL/OneMap.git
 cd OneMap/
 ```
 ### 2. Install dependencies
