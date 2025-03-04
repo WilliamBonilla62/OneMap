@@ -12,6 +12,8 @@
     <a href="https://www.finnbusch.com/OneMap/">Project Website</a> , <a href="https://arxiv.org/pdf/2409.11764">Paper (arXiv)</a>
   </p>
 </p>
+[![Docker Build](https://github.com/KTH-RPL/OneMap/actions/workflows/docker-build.yml/badge.svg)](https://github.com/KTH-RPL/OneMap/actions/workflows/docker-build.yml)
+
 
 This repository contains the code for the paper "One Map to Find Them All: Real-time Open-Vocabulary Mapping for
 Zero-shot Multi-Object Navigation". We provide a [dockerized environment](#setup-docker) to run the code or
