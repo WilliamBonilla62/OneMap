@@ -62,33 +62,20 @@ RUN python3 -m pip install --upgrade timm>=1.0.7
 RUN CMAKE_ARGS="-DCMAKE_POLICY_VERSION_MINIMUM=3.5"  python3 -m pip install git+https://github.com/facebookresearch/habitat-sim.git@v0.2.4
 # #
 # #
-RUN git clone https://github.com/WongKinYiu/yolov7
-RUN mkdir -p weights
-RUN gdown 1D_RE4lvA-CiwrP75wsL8Iu1a6NrtrP9T -O weights/clip.pth
-RUN wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7-e6e.pt -O weights/yolov7-e6e.pt
-RUN wget https://github.com/ChaoningZhang/MobileSAM/raw/refs/heads/master/weights/mobile_sam.pt -O weights/mobile_sam.pt
-# #
-# # # Copy the project code
-COPY ./config ./config
-COPY ./eval ./eval
-COPY ./mapping ./mapping
-COPY ./planning ./planning
-COPY ./planning_cpp ./planning_cpp
-COPY ./spot_utils ./spot_utils
-COPY ./vision_models ./vision_models
-COPY ./eval_habitat.py .
-COPY ./eval_habitat_multi.py .
-COPY ./onemap_utils ./onemap_utils
-COPY ./habitat_test.py ./
-RUN python3 -m pip install ./planning_cpp/
+# RUN git clone https://github.com/WongKinYiu/yolov7
+# RUN mkdir -p weights
+# RUN gdown 1D_RE4lvA-CiwrP75wsL8Iu1a6NrtrP9T -O weights/clip.pth
+# RUN wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7-e6e.pt -O weights/yolov7-e6e.pt
+# RUN wget https://github.com/ChaoningZhang/MobileSAM/raw/refs/heads/master/weights/mobile_sam.pt -O weights/mobile_sam.pt
+
+RUN python3 -m pip install ./planning_cpp/ || true
 RUN mkdir datasets
 
-ENV PYTHONPATH="${PYTHONPATH}:/onemap/"
 
-RUN  if [ "$HM3D" = "MINI" ] ; then python3 -m habitat_sim.utils.datasets_download \
-  --username $MATTERPORT_ID --password $MATTERPORT_SECRET \
-  --uids hm3d_minival_v0.2 \
-  --data-path datasets ; fi
+# RUN  if [ "$HM3D" = "MINI" ] ; then python3 -m habitat_sim.utils.datasets_download \
+#   --username $MATTERPORT_ID --password $MATTERPORT_SECRET \
+#   --uids hm3d_minival_v0.2 \
+#   --data-path datasets ; fi
 # 
 RUN  if [ "$HM3D" = "FULL" ] ; then python3 -m habitat_sim.utils.datasets_download \
   --username $MATTERPORT_ID --password $MATTERPORT_SECRET \
@@ -99,9 +86,9 @@ python3 -m habitat_sim.utils.datasets_download \
   --uids hm3d_val_v0.2 \
   --data-path datasets ;  fi
 
-# If we use the local dataset, symlinks get broken, we need to recreate a "local" symlink
-RUN if [ "$HM3D" = "LOCAL" ] ; then mkdir -p /onemap/datasets/scene_datasets/hm3d && \
-ln -s /onemap/datasets/versioned_data/hm3d-0.2/hm3d/train/hm3d_basis.scene_dataset_config.json /onemap/datasets/scene_datasets/hm3d/hm3d_basis.scene_dataset_config.json ; fi
+# # If we use the local dataset, symlinks get broken, we need to recreate a "local" symlink
+# RUN if [ "$HM3D" = "LOCAL" ] ; then mkdir -p /onemap/datasets/scene_datasets/hm3d && \
+# ln -s /onemap/datasets/versioned_data/hm3d-0.2/hm3d/train/hm3d_basis.scene_dataset_config.json /onemap/datasets/scene_datasets/hm3d/hm3d_basis.scene_dataset_config.json ; fi
 
 RUN gdown 1lBpYxXRjj8mDSUTI66xv0PfNd-vdSbNj -O multiobject_episodes.zip
 RUN unzip multiobject_episodes.zip
@@ -109,8 +96,5 @@ RUN mv multiobject_episodes datasets/ && rm multiobject_episodes.zip
 RUN wget https://dl.fbaipublicfiles.com/habitat/data/datasets/objectnav/hm3d/v1/objectnav_hm3d_v1.zip
 RUN unzip objectnav_hm3d_v1.zip
 RUN mv objectnav_hm3d_v1 datasets/ && rm objectnav_hm3d_v1.zip
-
-
-ENTRYPOINT ["sh", "-c", "if [ \"$HM3D\" = \"LOCAL\" ]; then ln -s $(ls /onemap/datasets/versioned_data/hm3d-0.2/hm3d | grep -v \"hm3d_basis.scene_dataset_config.json\" | sed \"s#^#/onemap/datasets/versioned_data/hm3d-0.2/hm3d/#\") /onemap/datasets/scene_datasets/hm3d/; fi && exec \"$@\"", "--"]
 
 CMD ["/bin/bash"]

@@ -1,3 +1,10 @@
 # ignore all .pngs
 *.png
 weights/*
+datasets/
+config/__pycache__/
+mapping/__pycache__/
+mapping/nav_goals/__pycache__/
+onemap_utils/__pycache__/
+planning/__pycache__/
+vision_models/__pycache__/

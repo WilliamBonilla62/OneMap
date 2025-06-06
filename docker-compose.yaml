@@ -14,9 +14,11 @@ services:
       context: .
       args:
         HM3D: ${HM3D}
-        HM3D_PATH: ${HM3D_PATH} # Passed at build time
+        HM3D_PATH: ${HM3D_PATH}
         MATTERPORT_ID: ${MATTERPORT_ID}
         MATTERPORT_SECRET: ${MATTERPORT_SECRET}
+    volumes:
+      - ./:/onemap
     deploy:
       resources:
         reservations:
